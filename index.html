@@ -20,7 +20,6 @@
             --secondary-color: #fce4ec; /* Pink sangat muda */
             --text-color: #4a235a; /* Ungu Tua untuk teks */
             --bg-color: #fdfafc; /* Latar belakang putih keunguan */
-            /* --gallery-bg-color: #f8f3fa; Variabel ini tidak lagi digunakan */
             --heart-color: #e91e63; /* Warna hati */
         }
 
@@ -39,6 +38,11 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             overflow-x: hidden; /* Mencegah scroll horizontal */
+        }
+        
+        /* PERUBAHAN: Class untuk mengunci scroll */
+        body.no-scroll {
+            overflow-y: hidden;
         }
         
         /* Layar Pembuka (Welcome Overlay) */
@@ -102,7 +106,7 @@
 
         /* Kontainer untuk konten di dalam section */
         .content-wrapper {
-            max-width: 1100px; /* Lebar maksimal diperbesar untuk desktop */
+            max-width: 1100px;
             width: 100%;
             margin: 0 auto;
             padding: 0 20px;
@@ -120,27 +124,27 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 80px 0; /* Menambah padding vertikal */
+            padding: 80px 0;
             width: 100%;
             text-align: center;
         }
 
         /* Hero Section (Halaman Muka) */
         .hero h1 {
-            font-size: 3rem; /* Ukuran font diperbesar untuk desktop */
+            font-size: 3rem;
             color: var(--primary-color);
             font-weight: 700;
             margin-bottom: 10px;
         }
         
         .hero h2 {
-            font-size: 2rem; /* Ukuran font diperbesar */
+            font-size: 2rem;
             font-weight: 600;
             margin-bottom: 20px;
         }
 
         #typed-text-container {
-            font-size: 1.3rem; /* Ukuran font diperbesar */
+            font-size: 1.3rem;
             font-weight: 300;
             min-height: 120px;
             color: var(--text-color);
@@ -162,7 +166,13 @@
         .scroll-down {
             margin-top: 50px;
             font-weight: 300;
+            opacity: 0; /* Mulai dengan transparan */
+            transition: opacity 1s ease-in;
             animation: bounce 2s infinite;
+        }
+        
+        .scroll-down.visible {
+            opacity: 1;
         }
 
         @keyframes bounce {
@@ -180,7 +190,7 @@
 
         /* Galeri Foto */
         .gallery h2 {
-            font-size: 2.5rem; /* Ukuran font diperbesar */
+            font-size: 2.5rem;
             margin-bottom: 60px;
             color: var(--primary-color);
         }
@@ -192,7 +202,6 @@
             box-shadow: 0 10px 25px rgba(162, 123, 175, 0.2);
             overflow: hidden;
             width: 100%;
-            /* PERUBAHAN: Ukuran gambar diperbesar agar lebih proporsional di desktop */
             max-width: 650px; 
             opacity: 0;
             transform: translateY(30px);
@@ -236,14 +245,15 @@
             .hero h2 { font-size: 1.5rem; }
             #typed-text-container { font-size: 1rem; }
             .gallery h2 { font-size: 2rem; }
-            .photo-card { max-width: 100%; } /* Foto memenuhi lebar di HP */
+            .photo-card { max-width: 100%; }
             .closing { font-size: 1.5rem; }
             .welcome-box p { font-size: 1.1rem; }
         }
 
     </style>
 </head>
-<body>
+<!-- PERUBAHAN: body dimulai dengan class no-scroll -->
+<body class="no-scroll">
 
     <!-- Layar Pembuka untuk memulai musik -->
     <div id="welcome-overlay">
@@ -259,7 +269,6 @@
 
     <!-- Konten Utama Website -->
     
-    <!-- Section 1: Ucapan Pembuka -->
     <section class="hero">
         <div class="content-wrapper">
             <h1>Selamat Ulang Tahun ke-25</h1>
@@ -268,12 +277,11 @@
                 <span id="typed-text"></span><span class="cursor"></span>
             </div>
             <div class="scroll-down">
-                <p>Scroll ke bawah &#x2193;</p>
+                <p>Silakan scroll ke bawah &#x2193;</p>
             </div>
         </div>
     </section>
 
-    <!-- Section 2: Galeri Kenangan -->
     <section class="gallery">
         <div class="content-wrapper">
             <h2>Sedikit Kenangan Indah Kita</h2>
@@ -292,7 +300,6 @@
         </div>
     </section>
 
-    <!-- Section 3: Penutup -->
     <section class="closing">
         <div class="content-wrapper">
             <p>Semoga kamu suka dengan hadiah kecil ini.</p>
@@ -302,25 +309,23 @@
         </div>
     </section>
 
-    <!-- Elemen Audio, atribut autoplay dihapus -->
     <audio id="background-music" loop>
         <source src="assets/happy.mp3" type="audio/mpeg">
         Browser Anda tidak mendukung elemen audio.
     </audio>
 
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
-            // --- ELEMEN & VARIABEL GLOBAL ---
             const audio = document.getElementById('background-music');
             const typedTextSpan = document.getElementById('typed-text');
             const welcomeOverlay = document.getElementById('welcome-overlay');
             const startButton = document.getElementById('start-button');
+            const scrollDownIndicator = document.querySelector('.scroll-down');
+            const cursor = document.querySelector('.cursor');
             
             let lastConfettiScroll = 0;
 
-            // --- FUNGSI UNTUK MEMULAI SEMUANYA ---
             startButton.addEventListener('click', function() {
                 welcomeOverlay.classList.add('hidden');
                 audio.play().catch(error => console.error("Gagal memutar musik:", error));
@@ -328,7 +333,6 @@
                 setTimeout(type, 1000);
             });
 
-            // --- FUNGSI EFEK KETIK (TYPING EFFECT) ---
             const textArray = [
                 "Hari ini adalah hari yang spesial...",
                 "Karena bidadari tercantik di dunia sedang berulang tahun.",
@@ -346,7 +350,7 @@
                     charIndex++;
                     setTimeout(type, 80);
                 } else {
-                    setTimeout(erase, 2000);
+                    setTimeout(erase, 2500); // Jeda lebih lama sebelum menghapus
                 }
             }
 
@@ -357,12 +361,25 @@
                     setTimeout(erase, 40);
                 } else {
                     textArrayIndex++;
-                    if (textArrayIndex >= textArray.length) textArrayIndex = 0;
-                    setTimeout(type, 1300);
+                    // PERUBAHAN: Cek jika semua teks sudah ditampilkan
+                    if (textArrayIndex >= textArray.length) {
+                        finishTypingAnimation();
+                    } else {
+                        setTimeout(type, 1300);
+                    }
                 }
             }
 
-            // --- FUNGSI ANIMASI FADE-IN PADA GALERI ---
+            function finishTypingAnimation() {
+                // Tampilkan pesan final dan permanen
+                typedTextSpan.textContent = "I Love You So Much, Ria ❤️";
+                cursor.style.display = 'none'; // Sembunyikan kursor
+                
+                // Aktifkan scroll dan tampilkan petunjuk
+                document.body.classList.remove('no-scroll');
+                scrollDownIndicator.classList.add('visible');
+            }
+
             const photoCards = document.querySelectorAll('.photo-card');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -371,7 +388,6 @@
             }, { threshold: 0.2 });
             photoCards.forEach(card => observer.observe(card));
 
-            // --- FUNGSI ANIMASI CONFETTI ---
             function fireConfetti() {
                 confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
             }
@@ -385,7 +401,6 @@
             }
             window.addEventListener('scroll', fireConfettiOnScroll);
 
-            // --- FUNGSI ANIMASI BALON ---
             const balloonCanvas = document.getElementById('balloon-canvas');
             const ctx = balloonCanvas.getContext('2d');
             balloonCanvas.width = window.innerWidth;
