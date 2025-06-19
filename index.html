@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun ke-25, Ria Sayang!</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* CSS Reset and Basic Setup */
+        :root {
+            --primary-color: #a27baf; /* Ungu Pastel Lembut */
+            --secondary-color: #fce4ec; /* Pink sangat muda */
+            --text-color: #4a235a; /* Ungu Tua untuk teks */
+            --bg-color: #fdfafc; /* Latar belakang putih keunguan */
+            --heart-color: #e91e63; /* Warna hati */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden; /* Mencegah scroll horizontal */
+        }
+        
+        /* Layar Pembuka (Welcome Overlay) */
+        #welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease-out;
+            text-align: center;
+        }
+
+        #welcome-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .welcome-box {
+            padding: 20px;
+        }
+
+        .welcome-box p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+        }
+        
+        #start-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+
+        /* Canvas untuk animasi di latar belakang */
+        #balloon-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Container Utama */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Section Styling */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        /* Hero Section (Halaman Muka) */
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .hero h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        #typed-text-container {
+            font-size: 1.2rem;
+            font-weight: 300;
+            min-height: 100px;
+            color: var(--text-color);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2rem;
+            background-color: var(--text-color);
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .scroll-down {
+            margin-top: 50px;
+            font-weight: 300;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+
+        /* Galeri Foto */
+        .gallery {
+            padding-top: 100px;
+        }
+        
+        .gallery h2 {
+            font-size: 2rem;
+            margin-bottom: 50px;
+            color: var(--primary-color);
+        }
+
+        .photo-card {
+            background: #fff;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(162, 123, 175, 0.2);
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .photo-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Closing Section */
+        .closing {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .closing p {
+            margin-bottom: 20px;
+        }
+        .closing .heart {
+            font-size: 3rem;
+            color: var(--heart-color);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero h2 { font-size: 1.5rem; }
+            #typed-text-container { font-size: 1rem; }
+            .welcome-box p { font-size: 1.1rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Layar Pembuka untuk memulai musik -->
+    <div id="welcome-overlay">
+        <div class="welcome-box">
+            <p>Hai Ria Sabarita, Sayangku</p>
+            <p>Ada kejutan kecil untukmu...</p>
+            <button id="start-button">Klik untuk Buka Hadiahnya &hearts;</button>
+        </div>
+    </div>
+
+    <!-- Canvas untuk animasi balon -->
+    <canvas id="balloon-canvas"></canvas>
+
+    <!-- Konten Utama Website -->
+    <div class="container">
+
+        <!-- Section 1: Ucapan Pembuka -->
+        <section class="hero">
+            <h1>Selamat Ulang Tahun ke-25</h1>
+            <h2>Ria Sabarita, Sayangku</h2>
+            <div id="typed-text-container">
+                <span id="typed-text"></span><span class="cursor"></span>
+            </div>
+            <div class="scroll-down">
+                <p>Scroll ke bawah &#x2193;</p>
+            </div>
+        </section>
+
+        <!-- Section 2: Galeri Kenangan -->
+        <section class="gallery">
+            <h2>Sedikit Kenangan Indah Kita</h2>
+            
+            <div class="photo-card">
+                <img src="assets/photo1.jpg" alt="Foto kenangan 1">
+            </div>
+            <div class="photo-card">
+                <img src="assets/photo2.jpg" alt="Foto kenangan 2">
+            </div>
+            <div class="photo-card">
+                <img src="assets/photo3.jpg" alt="Foto kenangan 3">
+            </div>
+            <div class="photo-card">
+                <img src="assets/photo4.jpg" alt="Foto kenangan 4">
+            </div>
+        </section>
+
+        <!-- Section 3: Penutup -->
+        <section class="closing">
+            <p>Semoga kamu suka dengan hadiah kecil ini.</p>
+            <p>Aku sangat mencintaimu,</p>
+            <div class="heart">&hearts;</div>
+            <p>Selamanya.</p>
+        </section>
+        
+    </div>
+
+    <!-- Elemen Audio, atribut autoplay dihapus -->
+    <audio id="background-music" loop>
+        <source src="assets/happy.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- ELEMEN & VARIABEL GLOBAL ---
+            const audio = document.getElementById('background-music');
+            const typedTextSpan = document.getElementById('typed-text');
+            const welcomeOverlay = document.getElementById('welcome-overlay');
+            const startButton = document.getElementById('start-button');
+            
+            let lastConfettiScroll = 0;
+
+            // --- FUNGSI UNTUK MEMULAI SEMUANYA ---
+            startButton.addEventListener('click', function() {
+                // Sembunyikan layar pembuka
+                welcomeOverlay.classList.add('hidden');
+                
+                // Putar musik
+                audio.play().catch(error => {
+                    console.error("Gagal memutar musik:", error);
+                });
+                
+                // Tembakkan confetti pertama kali
+                fireConfetti();
+
+                // Mulai animasi ketik setelah jeda singkat
+                setTimeout(type, 1000);
+            });
+
+            // --- FUNGSI EFEK KETIK (TYPING EFFECT) ---
+            const textArray = [
+                "Hari ini adalah hari yang spesial...",
+                "Karena bidadari tercantik di dunia sedang berulang tahun.",
+                "Aku berdoa agar semua mimpimu menjadi kenyataan.",
+                "Semoga kamu selalu bahagia, sehat, dan diberkahi.",
+                "Terima kasih sudah menjadi bagian terindah dalam hidupku.",
+                "Aku cinta kamu, lebih dari kata-kata yang bisa kuucapkan."
+            ];
+            let textArrayIndex = 0;
+            let charIndex = 0;
+
+            function type() {
+                if (charIndex < textArray[textArrayIndex].length) {
+                    typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+                    charIndex++;
+                    setTimeout(type, 80);
+                } else {
+                    setTimeout(erase, 2000);
+                }
+            }
+
+            function erase() {
+                if (charIndex > 0) {
+                    typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+                    charIndex--;
+                    setTimeout(erase, 40);
+                } else {
+                    textArrayIndex++;
+                    if (textArrayIndex >= textArray.length) {
+                        textArrayIndex = 0;
+                    }
+                    setTimeout(type, 1300);
+                }
+            }
+            // Catatan: Fungsi type() sekarang dipanggil dari event listener tombol start
+
+            // --- FUNGSI ANIMASI FADE-IN PADA GALERI ---
+            const photoCards = document.querySelectorAll('.photo-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.2
+            });
+            photoCards.forEach(card => observer.observe(card));
+
+            // --- FUNGSI ANIMASI CONFETTI ---
+            function fireConfetti() {
+                confetti({
+                    particleCount: 150,
+                    spread: 90,
+                    origin: { y: 0.6 }
+                });
+            }
+            
+            function fireConfettiOnScroll() {
+                const currentScroll = window.scrollY;
+                if (currentScroll > lastConfettiScroll + 300 && currentScroll > 100) {
+                    fireConfetti();
+                    lastConfettiScroll = currentScroll;
+                }
+            }
+            window.addEventListener('scroll', fireConfettiOnScroll);
+
+            // --- FUNGSI ANIMASI BALON ---
+            const balloonCanvas = document.getElementById('balloon-canvas');
+            const ctx = balloonCanvas.getContext('2d');
+            balloonCanvas.width = window.innerWidth;
+            balloonCanvas.height = window.innerHeight;
+
+            let balloons = [];
+            const balloonColors = ['#ffcdd2', '#e1bee7', '#d1c4e9', '#c5cae9', '#bbdefb'];
+
+            class Balloon {
+                constructor(x, y, radius, color, speed) {
+                    this.x = x;
+                    this.y = y;
+                    this.radius = radius;
+                    this.color = color;
+                    this.speed = speed;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y + this.radius);
+                    ctx.lineTo(this.x, this.y + this.radius + 30);
+                    ctx.strokeStyle = this.color;
+                    ctx.stroke();
+                }
+                update() {
+                    this.y -= this.speed;
+                    if (this.y < -this.radius - 30) {
+                        this.y = window.innerHeight + this.radius;
+                        this.x = Math.random() * window.innerWidth;
+                    }
+                }
+            }
+
+            function initBalloons() {
+                balloons = [];
+                for (let i = 0; i < 20; i++) {
+                    const radius = Math.random() * 15 + 10;
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight + window.innerHeight;
+                    const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+                    const speed = Math.random() * 1 + 0.5;
+                    balloons.push(new Balloon(x, y, radius, color, speed));
+                }
+            }
+
+            function animateBalloons() {
+                requestAnimationFrame(animateBalloons);
+                ctx.clearRect(0, 0, balloonCanvas.width, balloonCanvas.height);
+                balloons.forEach(balloon => {
+                    balloon.update();
+                    balloon.draw();
+                });
+            }
+            initBalloons();
+            animateBalloons();
+            
+            window.addEventListener('resize', () => {
+                balloonCanvas.width = window.innerWidth;
+                balloonCanvas.height = window.innerHeight;
+                initBalloons();
+            });
+
+        });
+    </script>
+</body>
+</html>
