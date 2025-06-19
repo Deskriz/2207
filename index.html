@@ -20,6 +20,7 @@
             --secondary-color: #fce4ec; /* Pink sangat muda */
             --text-color: #4a235a; /* Ungu Tua untuk teks */
             --bg-color: #fdfafc; /* Latar belakang putih keunguan */
+            /* --gallery-bg-color: #f8f3fa; Variabel ini tidak lagi digunakan */
             --heart-color: #e91e63; /* Warna hati */
         }
 
@@ -99,51 +100,56 @@
             pointer-events: none;
         }
 
-        /* Container Utama */
-        .container {
-            max-width: 900px;
+        /* Kontainer untuk konten di dalam section */
+        .content-wrapper {
+            max-width: 1100px; /* Lebar maksimal diperbesar untuk desktop */
+            width: 100%;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
             position: relative;
             z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         /* Section Styling */
         section {
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 60px 20px;
+            padding: 80px 0; /* Menambah padding vertikal */
+            width: 100%;
             text-align: center;
         }
 
         /* Hero Section (Halaman Muka) */
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 3rem; /* Ukuran font diperbesar untuk desktop */
             color: var(--primary-color);
             font-weight: 700;
             margin-bottom: 10px;
         }
         
         .hero h2 {
-            font-size: 1.8rem;
+            font-size: 2rem; /* Ukuran font diperbesar */
             font-weight: 600;
             margin-bottom: 20px;
         }
 
         #typed-text-container {
-            font-size: 1.2rem;
+            font-size: 1.3rem; /* Ukuran font diperbesar */
             font-weight: 300;
-            min-height: 100px;
+            min-height: 120px;
             color: var(--text-color);
         }
 
         .cursor {
             display: inline-block;
             width: 2px;
-            height: 1.2rem;
+            height: 1.3rem;
             background-color: var(--text-color);
             animation: blink 0.7s infinite;
         }
@@ -173,13 +179,9 @@
 
 
         /* Galeri Foto */
-        .gallery {
-            padding-top: 100px;
-        }
-        
         .gallery h2 {
-            font-size: 2rem;
-            margin-bottom: 50px;
+            font-size: 2.5rem; /* Ukuran font diperbesar */
+            margin-bottom: 60px;
             color: var(--primary-color);
         }
 
@@ -190,7 +192,8 @@
             box-shadow: 0 10px 25px rgba(162, 123, 175, 0.2);
             overflow: hidden;
             width: 100%;
-            max-width: 450px;
+            /* PERUBAHAN: Ukuran gambar diperbesar agar lebih proporsional di desktop */
+            max-width: 650px; 
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
@@ -209,14 +212,14 @@
 
         /* Closing Section */
         .closing {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 600;
         }
         .closing p {
             margin-bottom: 20px;
         }
         .closing .heart {
-            font-size: 3rem;
+            font-size: 4rem;
             color: var(--heart-color);
             animation: pulse 1.5s infinite;
         }
@@ -227,11 +230,14 @@
             100% { transform: scale(1); }
         }
 
-        /* Responsive Design */
+        /* Responsive Design untuk Mobile */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
             .hero h2 { font-size: 1.5rem; }
             #typed-text-container { font-size: 1rem; }
+            .gallery h2 { font-size: 2rem; }
+            .photo-card { max-width: 100%; } /* Foto memenuhi lebar di HP */
+            .closing { font-size: 1.5rem; }
             .welcome-box p { font-size: 1.1rem; }
         }
 
@@ -252,10 +258,10 @@
     <canvas id="balloon-canvas"></canvas>
 
     <!-- Konten Utama Website -->
-    <div class="container">
-
-        <!-- Section 1: Ucapan Pembuka -->
-        <section class="hero">
+    
+    <!-- Section 1: Ucapan Pembuka -->
+    <section class="hero">
+        <div class="content-wrapper">
             <h1>Selamat Ulang Tahun ke-25</h1>
             <h2>Ria Sabarita, Sayangku</h2>
             <div id="typed-text-container">
@@ -264,35 +270,37 @@
             <div class="scroll-down">
                 <p>Scroll ke bawah &#x2193;</p>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Section 2: Galeri Kenangan -->
-        <section class="gallery">
+    <!-- Section 2: Galeri Kenangan -->
+    <section class="gallery">
+        <div class="content-wrapper">
             <h2>Sedikit Kenangan Indah Kita</h2>
-            
             <div class="photo-card">
-                <img src="assets/photo1.jpg" alt="Foto kenangan 1">
+                <img src="assets/photo1.jpg" alt="Foto kenangan 1" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+photo1.jpg';">
             </div>
             <div class="photo-card">
-                <img src="assets/photo2.jpg" alt="Foto kenangan 2">
+                <img src="assets/photo2.jpg" alt="Foto kenangan 2" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+photo2.jpg';">
             </div>
             <div class="photo-card">
-                <img src="assets/photo3.jpg" alt="Foto kenangan 3">
+                <img src="assets/photo3.jpg" alt="Foto kenangan 3" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+photo3.jpg';">
             </div>
             <div class="photo-card">
-                <img src="assets/photo4.jpg" alt="Foto kenangan 4">
+                <img src="assets/photo4.jpg" alt="Foto kenangan 4" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+photo4.jpg';">
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Section 3: Penutup -->
-        <section class="closing">
+    <!-- Section 3: Penutup -->
+    <section class="closing">
+        <div class="content-wrapper">
             <p>Semoga kamu suka dengan hadiah kecil ini.</p>
             <p>Aku sangat mencintaimu,</p>
             <div class="heart">&hearts;</div>
             <p>Selamanya.</p>
-        </section>
-        
-    </div>
+        </div>
+    </section>
 
     <!-- Elemen Audio, atribut autoplay dihapus -->
     <audio id="background-music" loop>
@@ -314,18 +322,9 @@
 
             // --- FUNGSI UNTUK MEMULAI SEMUANYA ---
             startButton.addEventListener('click', function() {
-                // Sembunyikan layar pembuka
                 welcomeOverlay.classList.add('hidden');
-                
-                // Putar musik
-                audio.play().catch(error => {
-                    console.error("Gagal memutar musik:", error);
-                });
-                
-                // Tembakkan confetti pertama kali
+                audio.play().catch(error => console.error("Gagal memutar musik:", error));
                 fireConfetti();
-
-                // Mulai animasi ketik setelah jeda singkat
                 setTimeout(type, 1000);
             });
 
@@ -358,35 +357,23 @@
                     setTimeout(erase, 40);
                 } else {
                     textArrayIndex++;
-                    if (textArrayIndex >= textArray.length) {
-                        textArrayIndex = 0;
-                    }
+                    if (textArrayIndex >= textArray.length) textArrayIndex = 0;
                     setTimeout(type, 1300);
                 }
             }
-            // Catatan: Fungsi type() sekarang dipanggil dari event listener tombol start
 
             // --- FUNGSI ANIMASI FADE-IN PADA GALERI ---
             const photoCards = document.querySelectorAll('.photo-card');
-            
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
                 });
-            }, {
-                threshold: 0.2
-            });
+            }, { threshold: 0.2 });
             photoCards.forEach(card => observer.observe(card));
 
             // --- FUNGSI ANIMASI CONFETTI ---
             function fireConfetti() {
-                confetti({
-                    particleCount: 150,
-                    spread: 90,
-                    origin: { y: 0.6 }
-                });
+                confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
             }
             
             function fireConfettiOnScroll() {
@@ -409,15 +396,11 @@
 
             class Balloon {
                 constructor(x, y, radius, color, speed) {
-                    this.x = x;
-                    this.y = y;
-                    this.radius = radius;
-                    this.color = color;
-                    this.speed = speed;
+                    this.x = x; this.y = y; this.radius = radius; this.color = color; this.speed = speed;
                 }
                 draw() {
                     ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                     ctx.fillStyle = this.color;
                     ctx.fill();
                     ctx.beginPath();
@@ -438,7 +421,7 @@
             function initBalloons() {
                 balloons = [];
                 for (let i = 0; i < 20; i++) {
-                    const radius = Math.random() * 15 + 10;
+                    const radius = Math.random() * 20 + 15;
                     const x = Math.random() * window.innerWidth;
                     const y = Math.random() * window.innerHeight + window.innerHeight;
                     const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
