@@ -5,95 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selamat Ulang Tahun ke-25, Ria Sayang!</title>
     
-    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Canvas Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <style>
-        /* CSS Reset and Basic Setup */
         :root {
-            --primary-color: #a27baf; /* Ungu Pastel Lembut */
-            --secondary-color: #fce4ec; /* Pink sangat muda */
-            --text-color: #4a235a; /* Ungu Tua untuk teks */
-            --bg-color: #fdfafc; /* Latar belakang putih keunguan */
-            --heart-color: #e91e63; /* Warna hati */
+            --primary-color: #a27baf;
+            --secondary-color: #fce4ec;
+            --text-color: #4a235a;
+            --bg-color: #fdfafc;
+            --heart-color: #e91e63;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            overflow-x: hidden; /* Mencegah scroll horizontal */
+            overflow-x: hidden;
         }
+        body.no-scroll { overflow-y: hidden; }
         
-        /* PERUBAHAN: Class untuk mengunci scroll */
-        body.no-scroll {
-            overflow-y: hidden;
-        }
-        
-        /* Layar Pembuka (Welcome Overlay) */
-        #welcome-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 1s ease-out;
-            text-align: center;
-        }
-
-        #welcome-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        .welcome-box {
-            padding: 20px;
-        }
-
-        .welcome-box p {
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-        }
-        
-        #start-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1rem;
-            font-family: 'Poppins', sans-serif;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        #start-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-        }
-
-        /* Canvas untuk animasi di latar belakang */
+        /* DIKEMBALIKAN: Canvas untuk animasi Balon */
         #balloon-canvas {
             position: fixed;
             top: 0;
@@ -104,158 +42,87 @@
             pointer-events: none;
         }
 
-        /* Kontainer untuk konten di dalam section */
-        .content-wrapper {
-            max-width: 1100px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Section Styling */
-        section {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 80px 0;
-            width: 100%;
+        #welcome-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease-out;
             text-align: center;
         }
+        #welcome-overlay.hidden { opacity: 0; pointer-events: none; }
+        .welcome-box { padding: 20px; }
+        .welcome-box p { font-size: 1.2rem; margin-bottom: 25px; }
+        #start-button {
+            background-color: var(--primary-color); color: white; border: none;
+            padding: 15px 30px; font-size: 1rem; font-family: 'Poppins', sans-serif;
+            border-radius: 50px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        #start-button:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
 
-        /* Hero Section (Halaman Muka) */
-        .hero h1 {
-            font-size: 3rem;
-            color: var(--primary-color);
-            font-weight: 700;
-            margin-bottom: 10px;
+        .content-wrapper {
+            max-width: 1100px; width: 100%; margin: 0 auto; padding: 0 20px;
+            position: relative; z-index: 1;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
         
-        .hero h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        #typed-text-container {
-            font-size: 1.3rem;
-            font-weight: 300;
-            min-height: 120px;
-            color: var(--text-color);
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1.3rem;
-            background-color: var(--text-color);
-            animation: blink 0.7s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        
-        .scroll-down {
-            margin-top: 50px;
-            font-weight: 300;
-            opacity: 0; /* Mulai dengan transparan */
-            transition: opacity 1s ease-in;
-            animation: bounce 2s infinite;
-        }
-        
-        .scroll-down.visible {
-            opacity: 1;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-20px);
-            }
-            60% {
-                transform: translateY(-10px);
-            }
-        }
-
-
-        /* Galeri Foto */
-        .gallery h2 {
-            font-size: 2.5rem;
-            margin-bottom: 60px;
-            color: var(--primary-color);
-        }
-
-        .photo-card {
-            background: #fff;
-            margin-bottom: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(162, 123, 175, 0.2);
-            overflow: hidden;
-            width: 100%;
-            max-width: 650px; 
+        section {
+            min-height: 100vh; display: flex;
+            justify-content: center; align-items: center;
+            padding: 80px 0; width: 100%;
+            text-align: center; position: relative;
+            /* Efek fade-in saat scroll */
             opacity: 0;
             transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
         }
+        section.visible { opacity: 1; transform: translateY(0); }
         
-        .photo-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .hero h1 { font-size: 3rem; color: var(--primary-color); font-weight: 700; margin-bottom: 10px; }
+        .hero h2 { font-size: 2rem; font-weight: 600; margin-bottom: 20px; }
+        #typed-text-container { font-size: 1.3rem; font-weight: 300; min-height: 120px; color: var(--text-color); }
+        .cursor { display: inline-block; width: 2px; height: 1.3rem; background-color: var(--text-color); animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .scroll-down { margin-top: 50px; font-weight: 300; opacity: 0; transition: opacity 1s ease-in; animation: bounce 2s infinite; }
+        .scroll-down.visible { opacity: 1; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-10px); } }
 
-        .photo-card img {
-            width: 100%;
-            height: auto;
-            display: block;
+        .gallery { overflow: hidden; }
+        .gallery h2 { font-size: 2.5rem; margin-bottom: 40px; color: var(--primary-color); }
+        .swiper { width: 100%; padding-top: 50px; padding-bottom: 50px; }
+        .swiper-slide {
+            background-position: center; background-size: cover;
+            width: 300px; height: 420px;
+            background: #fff; border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(162, 123, 175, 0.3);
+            overflow: hidden;
         }
+        .swiper-slide img { display: block; width: 100%; height: 100%; object-fit: cover; }
+        .swiper-button-next, .swiper-button-prev { color: var(--primary-color) !important; }
+        .swiper-pagination-bullet-active { background-color: var(--primary-color) !important; }
+        .swiper-3d .swiper-slide-shadow-left, .swiper-3d .swiper-slide-shadow-right { background-image: none; }
 
-        /* Closing Section */
-        .closing {
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
-        .closing p {
-            margin-bottom: 20px;
-        }
-        .closing .heart {
-            font-size: 4rem;
-            color: var(--heart-color);
-            animation: pulse 1.5s infinite;
-        }
+        .closing { font-size: 1.8rem; font-weight: 600; }
+        .closing p { margin-bottom: 20px; }
+        .closing .heart { font-size: 4rem; color: var(--heart-color); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 50% { transform: scale(1.2); } }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        /* Responsive Design untuk Mobile */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .hero h2 { font-size: 1.5rem; }
-            #typed-text-container { font-size: 1rem; }
+            .hero h1 { font-size: 2.2rem; } .hero h2 { font-size: 1.6rem; }
+            #typed-text-container { font-size: 1rem; min-height: 100px; }
             .gallery h2 { font-size: 2rem; }
-            .photo-card { max-width: 100%; }
-            .closing { font-size: 1.5rem; }
-            .welcome-box p { font-size: 1.1rem; }
+            .closing { font-size: 1.5rem; } .welcome-box p { font-size: 1.1rem; }
+            .swiper-slide { width: 240px; height: 336px; }
         }
-
     </style>
 </head>
-<!-- PERUBAHAN: body dimulai dengan class no-scroll -->
 <body class="no-scroll">
 
-    <!-- Layar Pembuka untuk memulai musik -->
+    <canvas id="balloon-canvas"></canvas>
+
     <div id="welcome-overlay">
         <div class="welcome-box">
             <p>Hai Ria Sabarita, Sayangku</p>
@@ -264,205 +131,227 @@
         </div>
     </div>
 
-    <!-- Canvas untuk animasi balon -->
-    <canvas id="balloon-canvas"></canvas>
-
-    <!-- Konten Utama Website -->
-    
-    <section class="hero">
-        <div class="content-wrapper">
-            <h1>Selamat Ulang Tahun ke-25</h1>
-            <h2>Ria Sabarita, Sayangku</h2>
-            <div id="typed-text-container">
-                <span id="typed-text"></span><span class="cursor"></span>
+    <main>
+        <section class="hero">
+            <div class="content-wrapper">
+                <h1>Selamat Ulang Tahun ke-25</h1>
+                <h2>Ria Sabarita, Sayangku</h2>
+                <div id="typed-text-container">
+                    <span id="typed-text"></span><span class="cursor"></span>
+                </div>
+                <div class="scroll-down">
+                    <p>Silakan scroll ke bawah &#x2193;</p>
+                </div>
             </div>
-            <div class="scroll-down">
-                <p>Silakan scroll ke bawah &#x2193;</p>
+        </section>
+
+        <section class="gallery">
+            <div class="content-wrapper" style="max-width: 100%;">
+                <h2>Sedikit Kenangan Indah Kita</h2>
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="assets/1.webp" alt="Kenangan 1" /></div>
+                        <div class="swiper-slide"><img src="assets/2.webp" alt="Kenangan 2" /></div>
+                        <div class="swiper-slide"><img src="assets/3.webp" alt="Kenangan 3" /></div>
+                        <div class="swiper-slide"><img src="assets/4.webp" alt="Kenangan 4" /></div>
+                        <div class="swiper-slide"><img src="assets/5.webp" alt="Kenangan 5" /></div>
+                        <div class="swiper-slide"><img src="assets/6.webp" alt="Kenangan 6" /></div>
+                        <div class="swiper-slide"><img src="assets/7.webp" alt="Kenangan 7" /></div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-<section class="gallery">
-        <div class="content-wrapper">
-            <h2>Sedikit Kenangan Indah Kita</h2>
-            
-            <div class="photo-card">
-                <img src="assets/1.webp" alt="Foto kenangan 1" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+1.webp';">
+        <section class="closing">
+            <div class="content-wrapper">
+                <p>Semoga kamu suka dengan hadiah kecil ini.</p>
+                <p>Aku sangat mencintaimu,</p>
+                <div class="heart">&hearts;</div>
+                <p>Selamanya.</p>
             </div>
-
-            <div class="photo-card">
-                <img src="assets/2.webp" alt="Foto kenangan 2" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+2.webp';">
-            </div>
-
-            <div class="photo-card">
-                <img src="assets/3.webp" alt="Foto kenangan 3" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+3.webp';">
-            </div>
-
-            <div class="photo-card">
-                <img src="assets/4.webp" alt="Foto kenangan 4" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+4.webp';">
-            </div>
-
-            <div class="photo-card">
-                <img src="assets/5.webp" alt="Foto kenangan 5" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+5.webp';">
-            </div>
-
-            <div class="photo-card">
-                <img src="assets/6.webp" alt="Foto kenangan 6" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+6.webp';">
-            </div>
-
-            <div class="photo-card">
-                <img src="assets/7.webp" alt="Foto kenangan 7" onerror="this.onerror=null;this.src='https://placehold.co/800x1000/f8f3fa/4a235a?text=Gagal+memuat+7.webp';">
-            </div>
-
-        </div>
-    </section>
-
-    <section class="closing">
-        <div class="content-wrapper">
-            <p>Semoga kamu suka dengan hadiah kecil ini.</p>
-            <p>Aku sangat mencintaimu,</p>
-            <div class="heart">&hearts;</div>
-            <p>Selamanya.</p>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <audio id="background-music" loop>
         <source src="assets/happy.mp3" type="audio/mpeg">
         Browser Anda tidak mendukung elemen audio.
     </audio>
 
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Variabel utama ---
+        const audio = document.getElementById('background-music');
+        const welcomeOverlay = document.getElementById('welcome-overlay');
+        const startButton = document.getElementById('start-button');
+        const scrollDownIndicator = document.querySelector('.scroll-down');
+        
+        // --- Tombol Mulai ---
+        startButton.addEventListener('click', function() {
+            welcomeOverlay.classList.add('hidden');
+            audio.play().catch(error => console.error("Gagal memutar musik:", error));
             
-            const audio = document.getElementById('background-music');
-            const typedTextSpan = document.getElementById('typed-text');
-            const welcomeOverlay = document.getElementById('welcome-overlay');
-            const startButton = document.getElementById('start-button');
-            const scrollDownIndicator = document.querySelector('.scroll-down');
-            const cursor = document.querySelector('.cursor');
+            // Animasi confetti dan ketik dimulai
+            fireConfetti();
+            startTyping();
             
-            let lastConfettiScroll = 0;
+            // DIKEMBALIKAN: Animasi balon dimulai
+            initBalloons();
+            animateBalloons();
+        });
 
-            startButton.addEventListener('click', function() {
-                welcomeOverlay.classList.add('hidden');
-                audio.play().catch(error => console.error("Gagal memutar musik:", error));
-                fireConfetti();
-                setTimeout(type, 1000);
-            });
+        // --- Animasi Ketik ---
+        const typedTextSpan = document.getElementById('typed-text');
+        const cursor = document.querySelector('.cursor');
+        const textArray = [
+            "Hari ini adalah hari yang spesial...",
+            "Karena bidadari tercantik di dunia sedang berulang tahun.",
+            "Aku berdoa agar semua mimpimu menjadi kenyataan.",
+            "Semoga kamu selalu bahagia, sehat, dan diberkahi.",
+            "Terima kasih sudah menjadi bagian terindah dalam hidupku.",
+            "Aku cinta kamu, lebih dari kata-kata yang bisa kuucapkan."
+        ];
+        let textArrayIndex = 0;
+        let charIndex = 0;
+        
+        function startTyping() {
+            document.querySelector('.hero').classList.add('visible');
+            type();
+        }
 
-            const textArray = [
-                "Hari ini adalah hari yang spesial...",
-                "Karena bidadari tercantik di dunia sedang berulang tahun.",
-                "Aku berdoa agar semua mimpimu menjadi kenyataan.",
-                "Semoga kamu selalu bahagia, sehat, dan diberkahi.",
-                "Terima kasih sudah menjadi bagian terindah dalam hidupku.",
-                "Aku cinta kamu, lebih dari kata-kata yang bisa kuucapkan."
-            ];
-            let textArrayIndex = 0;
-            let charIndex = 0;
+        function type() {
+            if (charIndex < textArray[textArrayIndex].length) {
+                typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 80);
+            } else {
+                setTimeout(erase, 2500);
+            }
+        }
 
-            function type() {
-                if (charIndex < textArray[textArrayIndex].length) {
-                    typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
-                    charIndex++;
-                    setTimeout(type, 80);
+        function erase() {
+            if (charIndex > 0) {
+                typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, 40);
+            } else {
+                textArrayIndex = (textArrayIndex + 1) % textArray.length;
+                if (textArrayIndex === 0) { // Setelah loop pertama selesai
+                    finishTypingAnimation();
                 } else {
-                    setTimeout(erase, 2500); // Jeda lebih lama sebelum menghapus
+                    setTimeout(type, 1300);
                 }
             }
+        }
 
-            function erase() {
-                if (charIndex > 0) {
-                    typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(erase, 40);
-                } else {
-                    textArrayIndex++;
-                    // PERUBAHAN: Cek jika semua teks sudah ditampilkan
-                    if (textArrayIndex >= textArray.length) {
-                        finishTypingAnimation();
-                    } else {
-                        setTimeout(type, 1300);
+        function finishTypingAnimation() {
+            typedTextSpan.textContent = "I Love You So Much, Ria ❤️";
+            cursor.style.display = 'none';
+            document.body.classList.remove('no-scroll');
+            scrollDownIndicator.classList.add('visible');
+        }
+
+        // --- PERBAIKAN: Logika untuk memunculkan elemen saat scroll ---
+        let swiperInitialized = false;
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // PERBAIKAN: Inisialisasi Swiper dipindahkan ke sini.
+                    // Hanya dijalankan saat galeri muncul di layar & belum diinisialisasi.
+                    if (entry.target.classList.contains('gallery') && !swiperInitialized) {
+                        new Swiper(".mySwiper", {
+                            effect: "coverflow",
+                            grabCursor: true,
+                            centeredSlides: true,
+                            slidesPerView: "auto",
+                            loop: true,
+                            coverflowEffect: {
+                                rotate: 50,
+                                stretch: 0,
+                                depth: 100,
+                                modifier: 1,
+                                slideShadows: true,
+                            },
+                            pagination: { el: ".swiper-pagination" },
+                            navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+                        });
+                        swiperInitialized = true; // Tandai agar tidak diinisialisasi lagi
                     }
                 }
-            }
+            });
+        }, { threshold: 0.2 }); // threshold 0.2 berarti 20% bagian section harus terlihat
 
-            function finishTypingAnimation() {
-                // Tampilkan pesan final dan permanen
-                typedTextSpan.textContent = "I Love You So Much, Ria ❤️";
-                cursor.style.display = 'none'; // Sembunyikan kursor
-                
-                // Aktifkan scroll dan tampilkan petunjuk
-                document.body.classList.remove('no-scroll');
-                scrollDownIndicator.classList.add('visible');
+        document.querySelectorAll('section').forEach(section => {
+            if (!section.classList.contains('hero')) {
+                sectionObserver.observe(section);
             }
+        });
+        
+        // --- Animasi Confetti ---
+        let lastConfettiScroll = 0;
+        function fireConfetti() {
+            confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+        }
+        window.addEventListener('scroll', () => {
+             const currentScroll = window.scrollY;
+             if (!document.body.classList.contains('no-scroll') && currentScroll > lastConfettiScroll + 500) {
+                 fireConfetti();
+                 lastConfettiScroll = currentScroll;
+             }
+        });
 
-            const photoCards = document.querySelectorAll('.photo-card');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('visible');
-                });
-            }, { threshold: 0.2 });
-            photoCards.forEach(card => observer.observe(card));
+        // --- DIKEMBALIKAN: Animasi Balon ---
+        const balloonCanvas = document.getElementById('balloon-canvas');
+        const ctx = balloonCanvas.getContext('2d');
+        let balloons = [];
+        const balloonColors = ['#ffcdd2', '#e1bee7', '#d1c4e9', '#c5cae9', '#bbdefb'];
 
-            function fireConfetti() {
-                confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+        class Balloon {
+            constructor(x, y, radius, color, speed) {
+                this.x = x; this.y = y; this.radius = radius; this.color = color; this.speed = speed;
             }
-            
-            function fireConfettiOnScroll() {
-                const currentScroll = window.scrollY;
-                if (currentScroll > lastConfettiScroll + 300 && currentScroll > 100) {
-                    fireConfetti();
-                    lastConfettiScroll = currentScroll;
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y + this.radius);
+                ctx.lineTo(this.x, this.y + this.radius + 30);
+                ctx.strokeStyle = this.color;
+                ctx.stroke();
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y < -this.radius - 30) {
+                    this.y = window.innerHeight + this.radius;
+                    this.x = Math.random() * window.innerWidth;
                 }
             }
-            window.addEventListener('scroll', fireConfettiOnScroll);
+        }
 
-            const balloonCanvas = document.getElementById('balloon-canvas');
-            const ctx = balloonCanvas.getContext('2d');
+        function initBalloons() {
             balloonCanvas.width = window.innerWidth;
             balloonCanvas.height = window.innerHeight;
-
-            let balloons = [];
-            const balloonColors = ['#ffcdd2', '#e1bee7', '#d1c4e9', '#c5cae9', '#bbdefb'];
-
-            class Balloon {
-                constructor(x, y, radius, color, speed) {
-                    this.x = x; this.y = y; this.radius = radius; this.color = color; this.speed = speed;
-                }
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color;
-                    ctx.fill();
-                    ctx.beginPath();
-                    ctx.moveTo(this.x, this.y + this.radius);
-                    ctx.lineTo(this.x, this.y + this.radius + 30);
-                    ctx.strokeStyle = this.color;
-                    ctx.stroke();
-                }
-                update() {
-                    this.y -= this.speed;
-                    if (this.y < -this.radius - 30) {
-                        this.y = window.innerHeight + this.radius;
-                        this.x = Math.random() * window.innerWidth;
-                    }
-                }
+            balloons = [];
+            for (let i = 0; i < 20; i++) {
+                const radius = Math.random() * 20 + 15;
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight + window.innerHeight;
+                const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+                const speed = Math.random() * 1 + 0.5;
+                balloons.push(new Balloon(x, y, radius, color, speed));
             }
+        }
 
-            function initBalloons() {
-                balloons = [];
-                for (let i = 0; i < 20; i++) {
-                    const radius = Math.random() * 20 + 15;
-                    const x = Math.random() * window.innerWidth;
-                    const y = Math.random() * window.innerHeight + window.innerHeight;
-                    const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
-                    const speed = Math.random() * 1 + 0.5;
-                    balloons.push(new Balloon(x, y, radius, color, speed));
-                }
-            }
-
-            function animateBalloons() {
+        function animateBalloons() {
+            if(balloons.length > 0) { // Hanya jalankan jika balon sudah diinisialisasi
                 requestAnimationFrame(animateBalloons);
                 ctx.clearRect(0, 0, balloonCanvas.width, balloonCanvas.height);
                 balloons.forEach(balloon => {
@@ -470,16 +359,15 @@
                     balloon.draw();
                 });
             }
-            initBalloons();
-            animateBalloons();
-            
-            window.addEventListener('resize', () => {
-                balloonCanvas.width = window.innerWidth;
-                balloonCanvas.height = window.innerHeight;
-                initBalloons();
-            });
-
+        }
+        
+        window.addEventListener('resize', () => {
+            if(balloons.length > 0) {
+              initBalloons();
+            }
         });
+
+    });
     </script>
 </body>
 </html>
